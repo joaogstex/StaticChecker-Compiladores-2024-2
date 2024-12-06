@@ -1,0 +1,17 @@
+programa exemplo
+variavel x;
+x := 10;
+
+// isso é um comentário
+
+/* 
+comentário
+de
+várias
+linhas
+*/
+
+variavelMuitoGrandeQueUltrapassaOsTrintaCaracteres123
+12345678901234567890123456789012345
+
+fimPrograma;
