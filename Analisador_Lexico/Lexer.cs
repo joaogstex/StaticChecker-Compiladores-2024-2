@@ -4,36 +4,38 @@ using LexerApp.Models;
 namespace Analisador_Lexico.Core;
 
 public class Lexer {
-    private readonly InputReader _reader;
+    //private readonly InputReader _reader;
+    private readonly Buffer _buffer;
     private readonly List<Token> _tokens = new();
     private readonly ErrorHandler _errorHandler;
     private readonly SymbolTable _symbolTable = new();
 
     public Lexer(string sourceCode) {
-        _reader = new InputReader(sourceCode);
+        //_reader = new InputReader(sourceCode);
+        _buffer = new Buffer(sourceCode);
         _errorHandler = new ErrorHandler();
     }
 
     private void SkipWhitespace() {
-    while (char.IsWhiteSpace(_reader.Current)) {
-        _reader.Advance();
+    while (char.IsWhiteSpace(_buffer.Current)) {
+        _buffer.Advance();
     }
 }
 
     public List<Token> Analyze() {
-        while (_reader.Current != '\0') {
+        while (_buffer.Current != '\0') {
             SkipWhitespace();
 
-            if (_reader.Current == '/' && _reader.Peek() == '/') {
+            if (_buffer.Current == '/' && _buffer.Peek() == '/') {
             ProcessSingleLineComment();
             } 
-            else if (_reader.Current == '/' && _reader.Peek() == '*') {
+            else if (_buffer.Current == '/' && _buffer.Peek() == '*') {
             ProcessMultiLineComment();
             } 
-            else if (char.IsLetter(_reader.Current)) {
+            else if (char.IsLetter(_buffer.Current)) {
                 ProcessIdentifier();
             }
-            else if (char.IsDigit(_reader.Current)) {
+            else if (char.IsDigit(_buffer.Current)) {
                 ProcessNumber();
             }
             else {
@@ -67,39 +69,39 @@ public class Lexer {
     public string GenerateSymbolTableReport(string fileName) => _symbolTable.GenerateReport(fileName);
 
     private void ProcessSingleLineComment() {
-    while (_reader.Current != '\n' && _reader.Current != '\0') {
-        _reader.Advance();
+    while (_buffer.Current != '\n' && _buffer.Current != '\0') {
+        _buffer.Advance();
         }
     }
 
     private void ProcessMultiLineComment() {
-    _reader.Advance(); 
-    _reader.Advance(); 
+    _buffer.Advance(); 
+    _buffer.Advance(); 
 
-    while (_reader.Current != '\0') {
-        if (_reader.Current == '*' && _reader.Peek() == '/') {
-            _reader.Advance(); 
-            _reader.Advance(); 
+    while (_buffer.Current != '\0') {
+        if (_buffer.Current == '*' && _buffer.Peek() == '/') {
+            _buffer.Advance(); 
+            _buffer.Advance(); 
             break;
         }
 
-        _reader.Advance();
+        _buffer.Advance();
         }
     }
     
     private void ProcessIdentifier() {
-        var startLine = _reader.Line;
-        var startColumn = _reader.Column;
+        var startLine = _buffer.Linha;
+        var startColumn = _buffer.Coluna;
         var lexeme = "";
 
         int maxLength = 30; // Limite máximo 
         int count = 0;
 
-        while (char.IsLetterOrDigit(_reader.Current)) {
+        while (char.IsLetterOrDigit(_buffer.Current)) {
             if (count < maxLength) {
-            lexeme += _reader.Current;
+            lexeme += _buffer.Current;
         }
-            _reader.Advance();
+            _buffer.Advance();
             count++;
         }
 
@@ -112,18 +114,18 @@ public class Lexer {
     }
 
     private void ProcessNumber() {
-        var startLine = _reader.Line;
-        var startColumn = _reader.Column;
+        var startLine = _buffer.Linha;
+        var startColumn = _buffer.Coluna;
         var lexeme = "";
 
         int maxLength = 30; // Mesma coisa
         int count = 0;
 
-        while (char.IsDigit(_reader.Current)) {
+        while (char.IsDigit(_buffer.Current)) {
             if (count < maxLength) {
-            lexeme += _reader.Current;
+            lexeme += _buffer.Current;
         }
-            _reader.Advance();
+            _buffer.Advance();
             count++;
         }
 
@@ -135,9 +137,9 @@ public class Lexer {
     }
 
     private void ProcessSymbol() {
-        var startLine = _reader.Line;
-        var startColumn = _reader.Column;
-        var lexeme = _reader.Current.ToString();
+        var startLine = _buffer.Linha;
+        var startColumn = _buffer.Coluna;
+        var lexeme = _buffer.Current.ToString();
 
         if ("{};,:=()".Contains(lexeme)) {
             _tokens.Add(new Token("SYMBOL", lexeme, startLine, startColumn));
@@ -145,7 +147,7 @@ public class Lexer {
             _errorHandler.AddError(startLine, startColumn, $"Símbolo inesperado: {lexeme}");
         }
 
-        _reader.Advance();
+        _buffer.Advance();
     }
 
     public void PrintErrors() => _errorHandler.PrintErrors();

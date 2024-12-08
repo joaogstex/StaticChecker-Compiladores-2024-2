@@ -12,3 +12,4 @@ D:\Downloads\Analisador_Lexico-main\Analisador_Lexico\obj\Debug\net9.0\refint\An
 D:\Downloads\Analisador_Lexico-main\Analisador_Lexico\obj\Debug\net9.0\Analisador_Lexico.pdb
 D:\Downloads\Analisador_Lexico-main\Analisador_Lexico\obj\Debug\net9.0\Analisador_Lexico.genruntimeconfig.cache
 D:\Downloads\Analisador_Lexico-main\Analisador_Lexico\obj\Debug\net9.0\ref\Analisador_Lexico.dll
+D:\Downloads\Analisador_Lexico-main\Analisador_Lexico\obj\Debug\net9.0\Analisador_Lexico.sourcelink.json
