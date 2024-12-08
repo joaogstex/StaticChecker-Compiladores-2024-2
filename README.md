@@ -59,7 +59,6 @@ Execute o programa fornecendo o nome do arquivo de entrada como argumento:
 dotnet run MeuTeste
 ```
 
-Caso o arquivo não tenha a extensão .242, ela será adicionada automaticamente.
 Os relatórios serão gerados com extensões .LEX e .TAB.
 
 
